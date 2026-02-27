@@ -3,356 +3,488 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stable AI – Ask Me Anything About Investing</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Stable AI – Investment Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 :root {
-  --sm-green: #00B386;
-  --sm-green-light: #E6F7F3;
-  --sm-green-dark: #008C6A;
-  --sm-navy: #0B1F3A;
-  --sm-blue-soft: #EAF0F8;
-  --sm-white: #FFFFFF;
-  --sm-bg: #F5F7FA;
-  --sm-border: #E2E8F0;
-  --sm-border-dark: #CBD5E1;
-  --sm-text: #0B1F3A;
-  --sm-text-mid: #4A6080;
-  --sm-text-muted: #8FA3BE;
-  --sm-orange: #FF7A3C;
-  --sm-gold: #F5A623;
-  --sm-purple: #7C5CBF;
-  --shadow-sm: 0 1px 3px rgba(11,31,58,0.06);
-  --shadow-md: 0 4px 16px rgba(11,31,58,0.08);
-  --shadow-lg: 0 10px 40px rgba(11,31,58,0.12);
-  --radius: 14px;
-  --radius-sm: 10px;
-  --radius-xs: 6px;
-  --font: 'Inter', -apple-system, sans-serif;
+  --green: #2b8a3e;
+  --green-light: #e8f5e9;
+  --green-mid: #c8e6c9;
+  --green-dark: #1b5e20;
+  --bg: #f2f2f2;
+  --white: #ffffff;
+  --text: #111111;
+  --text-mid: #555555;
+  --text-soft: #999999;
+  --border: #e4e4e4;
+  --shadow: 0 1px 8px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+  --font: 'DM Sans', sans-serif;
+  --font-display: 'DM Serif Display', serif;
+  --r: 16px;
+  --r-sm: 10px;
+  --r-xs: 7px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font); background: var(--sm-bg); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; }
-.app-wrap { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 12px; }
-.top-bar { background: var(--sm-white); border-radius: var(--radius); padding: 14px 20px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--sm-border); }
-.logo-icon { width: 38px; height: 38px; background: var(--sm-green); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.logo-text .brand-name { font-weight: 700; font-size: 16px; color: var(--sm-navy); letter-spacing: -0.3px; }
-.logo-text .brand-sub { font-size: 11px; color: var(--sm-text-muted); }
-.bar-divider { width: 1px; height: 32px; background: var(--sm-border); margin: 0 4px; }
-.trust-badges { display: flex; gap: 8px; }
-.trust-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--sm-blue-soft); color: var(--sm-navy); border: 1px solid var(--sm-border); }
-.live-pill { margin-left: auto; display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; background: var(--sm-green-light); border: 1px solid rgba(0,179,134,0.25); font-size: 12px; font-weight: 500; color: var(--sm-green-dark); flex-shrink: 0; }
-.live-dot { width: 7px; height: 7px; background: var(--sm-green); border-radius: 50%; animation: livePulse 2s infinite; }
-@keyframes livePulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-.chat-window { background: var(--sm-white); border-radius: var(--radius); border: 1px solid var(--sm-border); box-shadow: var(--shadow-md); display: flex; flex-direction: column; height: 72vh; min-height: 480px; max-height: 720px; overflow: hidden; }
-.messages { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; scroll-behavior: smooth; }
-.messages::-webkit-scrollbar { width: 4px; }
-.messages::-webkit-scrollbar-thumb { background: var(--sm-border-dark); border-radius: 2px; }
-.msg-row { display: flex; gap: 10px; animation: fadeUp 0.25s ease; }
-.msg-row.user { flex-direction: row-reverse; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
-.avatar { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 2px; }
-.avatar.bot { background: var(--sm-green); color: white; }
-.avatar.user { background: var(--sm-navy); color: white; font-weight: 600; font-size: 11px; }
-.bubble-wrap { display: flex; flex-direction: column; gap: 8px; max-width: 75%; }
-.msg-row.user .bubble-wrap { align-items: flex-end; }
-.bubble { padding: 12px 15px; border-radius: var(--radius-sm); font-size: 14px; line-height: 1.6; color: var(--sm-text); }
-.msg-row.bot .bubble { background: var(--sm-bg); border: 1px solid var(--sm-border); border-top-left-radius: 3px; }
-.msg-row.user .bubble { background: var(--sm-navy); color: white; border-bottom-right-radius: 3px; }
-.bubble b, .bubble strong { color: var(--sm-green-dark); }
-.msg-row.user .bubble b, .msg-row.user .bubble strong { color: #7ee8cc; }
-.bubble p { margin-bottom: 6px; }
-.bubble p:last-child { margin-bottom: 0; }
-.bubble ul { padding-left: 18px; margin-top: 4px; }
-.bubble ul li { margin-bottom: 3px; }
-.timestamp { font-size: 10.5px; color: var(--sm-text-muted); padding: 0 4px; }
-.chips-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
-.chip { padding: 6px 13px; border-radius: 20px; background: var(--sm-white); border: 1.5px solid var(--sm-border-dark); color: var(--sm-navy); font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all 0.15s; font-family: var(--font); white-space: nowrap; }
-.chip:hover { border-color: var(--sm-green); color: var(--sm-green-dark); background: var(--sm-green-light); transform: translateY(-1px); }
-.product-list { display: flex; flex-direction: column; gap: 9px; margin-top: 6px; width: 100%; }
-.prod-card { background: var(--sm-white); border: 1.5px solid var(--sm-border); border-radius: var(--radius-sm); padding: 13px 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.15s; }
-.prod-card:hover { border-color: var(--sm-green); box-shadow: 0 0 0 3px var(--sm-green-light); transform: translateY(-1px); }
-.prod-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; background: var(--sm-green-light); }
+body { font-family: var(--font); background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+
+.wrap { width: 100%; max-width: 780px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ── TOP BAR ── */
+.top-bar {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 13px 18px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--green);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(43,138,62,0.3);
+}
+.logo-text { line-height: 1.2; }
+.logo-text .t1 { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+.logo-text .t1 span { color: var(--green); }
+.logo-text .t2 { font-size: 11px; color: var(--text-soft); font-weight: 400; }
+.divider { width: 1px; height: 28px; background: var(--border); margin: 0 2px; }
+.badges { display: flex; gap: 6px; }
+.badge { padding: 4px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--bg); border: 1px solid var(--border); color: var(--text-mid); }
+.live-badge {
+  margin-left: auto; display: flex; align-items: center; gap: 5px;
+  padding: 5px 11px; border-radius: 20px;
+  background: var(--green-light); border: 1px solid var(--green-mid);
+  font-size: 11.5px; font-weight: 600; color: var(--green-dark); flex-shrink: 0;
+}
+.live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+/* ── CHAT WINDOW ── */
+.chat {
+  background: var(--white); border-radius: var(--r);
+  border: 1px solid var(--border); box-shadow: var(--shadow-md);
+  display: flex; flex-direction: column;
+  height: 70vh; min-height: 500px; max-height: 700px; overflow: hidden;
+}
+
+/* ── MESSAGES ── */
+.msgs { flex: 1; overflow-y: auto; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+.msgs::-webkit-scrollbar { width: 3px; }
+.msgs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.row { display: flex; gap: 9px; animation: up 0.22s ease; }
+.row.user { flex-direction: row-reverse; }
+@keyframes up { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+.av { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 2px; }
+.av.bot { background: var(--green); color: white; box-shadow: 0 2px 6px rgba(43,138,62,0.25); }
+.av.user { background: var(--text); color: white; font-size: 10px; font-weight: 700; }
+
+.bwrap { display: flex; flex-direction: column; gap: 6px; max-width: 74%; }
+.row.user .bwrap { align-items: flex-end; }
+
+.bub { padding: 11px 14px; border-radius: var(--r-sm); font-size: 14px; line-height: 1.65; color: var(--text); }
+.row.bot .bub { background: var(--bg); border: 1px solid var(--border); border-top-left-radius: 3px; }
+.row.user .bub { background: var(--text); color: white; border-bottom-right-radius: 3px; }
+.bub b, .bub strong { color: var(--green-dark); font-weight: 600; }
+.row.user .bub b, .row.user .bub strong { color: #81c784; }
+.bub p { margin-bottom: 5px; } .bub p:last-child { margin-bottom: 0; }
+.bub ul { padding-left: 16px; margin-top: 4px; } .bub ul li { margin-bottom: 3px; }
+.ts { font-size: 10px; color: var(--text-soft); padding: 0 3px; }
+
+/* ── CHIPS ── */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.chip {
+  padding: 6px 12px; border-radius: 20px;
+  background: var(--white); border: 1.5px solid var(--border);
+  color: var(--text); font-size: 12.5px; font-weight: 500;
+  cursor: pointer; transition: all 0.13s; font-family: var(--font); white-space: nowrap;
+}
+.chip:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-light); transform: translateY(-1px); box-shadow: var(--shadow); }
+
+/* ── PRODUCT CARDS ── */
+.prod-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; width: 100%; }
+.prod-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-sm); padding: 12px 14px;
+  display: flex; align-items: center; gap: 11px;
+  cursor: pointer; transition: all 0.13s;
+}
+.prod-card:hover { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-light); transform: translateY(-1px); }
+.prod-ico { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; background: var(--green-light); }
 .prod-info { flex: 1; }
-.prod-name { font-size: 13.5px; font-weight: 600; color: var(--sm-navy); }
-.prod-meta { font-size: 12px; color: var(--sm-text-muted); margin-top: 2px; }
+.prod-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.prod-meta { font-size: 11.5px; color: var(--text-soft); margin-top: 2px; }
 .prod-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.prod-rate { font-size: 18px; font-weight: 700; color: var(--sm-green-dark); }
-.prod-rate span { font-size: 11px; font-weight: 400; color: var(--sm-text-muted); }
-.tag { font-size: 10.5px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-.tag.green { background: var(--sm-green-light); color: var(--sm-green-dark); }
-.tag.orange { background: #FFF3EC; color: var(--sm-orange); }
-.tag.navy { background: var(--sm-blue-soft); color: var(--sm-navy); }
-.cta-card { background: linear-gradient(135deg, #EAF7F3, #EAF0F8); border: 1.5px solid rgba(0,179,134,0.2); border-radius: var(--radius-sm); padding: 16px; margin-top: 6px; }
-.cta-card h4 { font-size: 14px; font-weight: 600; color: var(--sm-navy); margin-bottom: 4px; }
-.cta-card p { font-size: 13px; color: var(--sm-text-mid); margin-bottom: 12px; line-height: 1.5; }
-.cta-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.cta-btn { padding: 9px 16px; border-radius: var(--radius-xs); font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; font-family: var(--font); }
-.cta-btn.primary { background: var(--sm-green); color: white; }
-.cta-btn.primary:hover { background: var(--sm-green-dark); transform: translateY(-1px); }
-.cta-btn.secondary { background: var(--sm-white); color: var(--sm-navy); border: 1.5px solid var(--sm-border-dark); }
-.cta-btn.secondary:hover { border-color: var(--sm-green); color: var(--sm-green-dark); }
-.quiz-card { background: var(--sm-blue-soft); border: 1.5px solid var(--sm-border); border-radius: var(--radius-sm); padding: 16px; margin-top: 6px; }
-.quiz-card h4 { font-size: 13.5px; font-weight: 600; color: var(--sm-navy); margin-bottom: 10px; }
-.quiz-opts { display: flex; flex-direction: column; gap: 8px; }
-.quiz-opt { padding: 10px 14px; border-radius: var(--radius-xs); border: 1.5px solid var(--sm-border-dark); background: var(--sm-white); cursor: pointer; font-size: 13px; color: var(--sm-text); transition: all 0.15s; font-family: var(--font); text-align: left; }
-.quiz-opt:hover, .quiz-opt.selected { border-color: var(--sm-green); background: var(--sm-green-light); color: var(--sm-navy); }
-.info-card { background: var(--sm-white); border: 1.5px solid var(--sm-border); border-left: 3px solid var(--sm-green); border-radius: var(--radius-xs); padding: 12px 14px; margin-top: 6px; }
-.info-title { font-size: 12.5px; font-weight: 600; color: var(--sm-green-dark); margin-bottom: 6px; }
-.info-body { font-size: 13px; color: var(--sm-text-mid); line-height: 1.6; }
-.typing { display: flex; align-items: center; gap: 5px; padding: 8px 12px; }
-.typing-dot { width: 7px; height: 7px; background: var(--sm-text-muted); border-radius: 50%; animation: typeBounce 1.2s infinite; }
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes typeBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4;} 30%{transform:translateY(-5px);opacity:1;} }
-.input-zone { padding: 14px 16px; border-top: 1px solid var(--sm-border); display: flex; gap: 10px; align-items: flex-end; background: var(--sm-white); }
-.input-box { flex: 1; background: var(--sm-bg); border: 1.5px solid var(--sm-border); border-radius: 12px; padding: 11px 14px; font-size: 14px; font-family: var(--font); color: var(--sm-text); resize: none; outline: none; min-height: 44px; max-height: 110px; transition: border-color 0.15s; line-height: 1.5; }
-.input-box::placeholder { color: var(--sm-text-muted); }
-.input-box:focus { border-color: var(--sm-green); background: var(--sm-white); box-shadow: 0 0 0 3px var(--sm-green-light); }
-.send-btn { width: 44px; height: 44px; background: var(--sm-green); border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; color: white; }
-.send-btn:hover { background: var(--sm-green-dark); transform: translateY(-1px); }
-.send-btn:disabled { background: var(--sm-border-dark); cursor: not-allowed; transform: none; }
-.footer-bar { display: flex; align-items: center; justify-content: space-between; padding: 0 2px; }
-.footer-left { font-size: 11px; color: var(--sm-text-muted); }
-.footer-right { display: flex; gap: 12px; }
-.footer-link { font-size: 11.5px; color: var(--sm-text-muted); cursor: pointer; transition: color 0.15s; }
-.footer-link:hover { color: var(--sm-green-dark); }
-.modal-overlay { position: fixed; inset: 0; background: rgba(11,31,58,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-.modal { background: var(--sm-white); border-radius: var(--radius); width: 100%; max-width: 440px; padding: 28px; box-shadow: var(--shadow-lg); position: relative; }
-.modal h3 { font-size: 18px; font-weight: 700; color: var(--sm-navy); margin-bottom: 6px; }
-.modal .modal-sub { font-size: 13.5px; color: var(--sm-text-muted); margin-bottom: 20px; line-height: 1.5; }
-.modal-form { display: flex; flex-direction: column; gap: 12px; }
-.form-field label { display: block; font-size: 11.5px; font-weight: 600; color: var(--sm-text-mid); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-field input, .form-field select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--sm-border); border-radius: var(--radius-xs); font-size: 14px; font-family: var(--font); color: var(--sm-text); background: var(--sm-bg); outline: none; transition: border-color 0.15s; }
-.form-field input:focus, .form-field select:focus { border-color: var(--sm-green); background: var(--sm-white); }
-.modal-actions { display: flex; gap: 10px; margin-top: 16px; }
-.modal-close { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; background: var(--sm-bg); border: none; border-radius: 50%; cursor: pointer; font-size: 14px; color: var(--sm-text-muted); display: flex; align-items: center; justify-content: center; }
-@media(max-width:600px){.trust-badges{display:none;}.bar-divider{display:none;}.bubble-wrap{max-width:88%;}}
+.prod-rate { font-family: var(--font-display); font-size: 19px; color: var(--green-dark); }
+.prod-rate span { font-family: var(--font); font-size: 11px; color: var(--text-soft); font-weight: 400; }
+.tag { font-size: 10px; padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+.tag.g { background: var(--green-light); color: var(--green-dark); }
+.tag.o { background: #fff3e0; color: #e65100; }
+.tag.b { background: #e3f2fd; color: #0d47a1; }
+
+/* ── INVEST CTA (the key new component) ── */
+.invest-cta {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-top: 3px solid var(--green);
+  border-radius: var(--r-sm);
+  padding: 14px 15px;
+  margin-top: 8px;
+}
+.invest-cta .ic-title { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.invest-cta .ic-sub { font-size: 12.5px; color: var(--text-mid); margin-bottom: 12px; line-height: 1.5; }
+.ic-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.ic-btn {
+  padding: 9px 15px; border-radius: var(--r-xs);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.13s; font-family: var(--font);
+  display: flex; align-items: center; gap: 6px;
+}
+.ic-btn.primary { background: var(--green); color: white; flex: 1; justify-content: center; }
+.ic-btn.primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(43,138,62,0.3); }
+.ic-btn.secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); flex: 1; justify-content: center; }
+.ic-btn.secondary:hover { border-color: var(--green); color: var(--green-dark); }
+
+/* ── QUIZ ── */
+.quiz { background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--r-sm); padding: 14px; margin-top: 6px; }
+.quiz h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.q-opts { display: flex; flex-direction: column; gap: 7px; }
+.q-opt {
+  padding: 10px 13px; border-radius: var(--r-xs);
+  border: 1.5px solid var(--border); background: var(--white);
+  cursor: pointer; font-size: 13px; color: var(--text-mid);
+  transition: all 0.13s; font-family: var(--font); text-align: left; font-weight: 500;
+}
+.q-opt:hover, .q-opt.sel { border-color: var(--green); color: var(--green-dark); background: var(--green-light); }
+
+/* ── INFO CARD ── */
+.info-card { background: var(--green-light); border-left: 3px solid var(--green); border-radius: var(--r-xs); padding: 11px 13px; margin-top: 6px; font-size: 13px; color: var(--green-dark); line-height: 1.6; }
+.info-card strong { color: var(--green-dark); }
+
+/* ── TYPING ── */
+.typing { display: flex; gap: 4px; padding: 8px 11px; }
+.tdot { width: 6px; height: 6px; background: var(--text-soft); border-radius: 50%; animation: bounce 1.2s infinite; }
+.tdot:nth-child(2){animation-delay:.2s;} .tdot:nth-child(3){animation-delay:.4s;}
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.4;} 30%{transform:translateY(-5px);opacity:1;} }
+
+/* ── INPUT ── */
+.inp-area { padding: 12px 14px; border-top: 1px solid var(--border); display: flex; gap: 9px; align-items: flex-end; background: var(--white); }
+.inp {
+  flex: 1; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 11px; padding: 10px 13px; font-size: 14px;
+  font-family: var(--font); color: var(--text); resize: none; outline: none;
+  min-height: 42px; max-height: 110px; line-height: 1.5; transition: border-color 0.15s;
+}
+.inp::placeholder { color: var(--text-soft); }
+.inp:focus { border-color: var(--green); background: var(--white); box-shadow: 0 0 0 3px var(--green-light); }
+.send {
+  width: 42px; height: 42px; background: var(--green); border: none;
+  border-radius: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: white; transition: all 0.13s;
+  box-shadow: 0 2px 8px rgba(43,138,62,0.3);
+}
+.send:hover { background: var(--green-dark); transform: translateY(-1px); }
+.send:disabled { background: var(--border); cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── FOOTER ── */
+.foot { display: flex; align-items: center; justify-content: space-between; padding: 0 2px; }
+.foot-l { font-size: 11px; color: var(--text-soft); }
+.foot-r { display: flex; gap: 14px; }
+.foot-link { font-size: 11.5px; color: var(--text-soft); cursor: pointer; transition: color 0.13s; }
+.foot-link:hover { color: var(--green-dark); }
+
+/* ── MODAL ── */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+.modal { background: var(--white); border-radius: var(--r); width: 100%; max-width: 420px; padding: 26px; box-shadow: var(--shadow-md); position: relative; }
+.modal h3 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+.modal .msub { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; line-height: 1.5; }
+.mform { display: flex; flex-direction: column; gap: 11px; }
+.mfield label { display: block; font-size: 11px; font-weight: 700; color: var(--text-mid); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.mfield input, .mfield select {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
+  border-radius: var(--r-xs); font-size: 14px; font-family: var(--font);
+  color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s;
+}
+.mfield input:focus, .mfield select:focus { border-color: var(--green); background: var(--white); }
+.mactions { display: flex; gap: 8px; margin-top: 14px; }
+.mclose { position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; background: var(--bg); border: none; border-radius: 50%; cursor: pointer; font-size: 13px; color: var(--text-soft); display: flex; align-items: center; justify-content: center; }
+
+@media(max-width:600px){ .badges{display:none;} .divider{display:none;} .bwrap{max-width:88%;} }
 </style>
 </head>
 <body>
-<div class="app-wrap">
+<div class="wrap">
+
+  <!-- TOP BAR -->
   <div class="top-bar">
     <div style="display:flex;align-items:center;gap:10px">
-      <div class="logo-icon">💚</div>
+      <div class="logo-mark">💚</div>
       <div class="logo-text">
-        <div class="brand-name">Stable AI</div>
-        <div class="brand-sub">by Stable Money</div>
+        <div class="t1">Stable <span>AI</span></div>
+        <div class="t2">by Stable Money</div>
       </div>
     </div>
-    <div class="bar-divider"></div>
-    <div class="trust-badges">
-      <span class="trust-badge">🏦 200+ Banks</span>
-      <span class="trust-badge">🔒 RBI Regulated</span>
-      <span class="trust-badge">⭐ 30L+ Investors</span>
+    <div class="divider"></div>
+    <div class="badges">
+      <span class="badge">🏦 200+ Banks</span>
+      <span class="badge">🔒 RBI Regulated</span>
+      <span class="badge">⭐ 30L+ Investors</span>
     </div>
-    <div class="live-pill"><div class="live-dot"></div>AI Powered</div>
+    <div class="live-badge"><div class="live-dot"></div>AI Live</div>
   </div>
-  <div class="chat-window">
-    <div class="messages" id="messages"></div>
-    <div class="input-zone">
-      <textarea class="input-box" id="userInput" placeholder="Ask about FDs, Bonds, Gold, Silver, Credit Cards…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+
+  <!-- CHAT -->
+  <div class="chat">
+    <div class="msgs" id="msgs"></div>
+    <div class="inp-area">
+      <textarea class="inp" id="inp" placeholder="Ask about FDs, Bonds, Gold, Silver, Credit Cards…" rows="1" onkeydown="hk(event)" oninput="ar(this)"></textarea>
+      <button class="send" id="sbtn" onclick="send()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
   </div>
-  <div class="footer-bar">
-    <div class="footer-left">🔒 Bank-grade encryption · Your data is safe</div>
-    <div class="footer-right">
-      <span class="footer-link" onclick="openCallback()">📞 Request Callback</span>
-      <span class="footer-link" onclick="openPersona()">👤 My Investor Profile</span>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="foot-l">🔒 Bank-grade encryption · Your data is safe</div>
+    <div class="foot-r">
+      <span class="foot-link" onclick="openCb()">📞 Request Callback</span>
+      <span class="foot-link" onclick="openProfile()">👤 My Profile</span>
     </div>
   </div>
 </div>
 
 <!-- CALLBACK MODAL -->
-<div class="modal-overlay" id="callbackModal" style="display:none" onclick="closeModal('callbackModal')">
+<div class="overlay" id="cbModal" style="display:none" onclick="closeMod('cbModal')">
   <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal('callbackModal')">✕</button>
+    <button class="mclose" onclick="closeMod('cbModal')">✕</button>
     <h3>📞 Request a Callback</h3>
-    <p class="modal-sub">Our investment experts will call you within 2 hours.</p>
-    <div class="modal-form">
-      <div class="form-field"><label>Your Name</label><input type="text" id="cb-name" placeholder="e.g. Rahul Sharma"></div>
-      <div class="form-field"><label>Mobile Number</label><input type="tel" id="cb-phone" placeholder="+91 98765 43210"></div>
-      <div class="form-field"><label>Best Time to Call</label>
-        <select id="cb-time"><option>Within 2 hours</option><option>Today evening (6–9 PM)</option><option>Tomorrow morning (10 AM–12 PM)</option></select>
+    <p class="msub">Our investment experts will call you within 2 hours — no obligation, completely free.</p>
+    <div class="mform">
+      <div class="mfield"><label>Your Name</label><input type="text" id="cb-name" placeholder="e.g. Rahul Sharma"></div>
+      <div class="mfield"><label>Mobile Number</label><input type="tel" id="cb-phone" placeholder="+91 98765 43210"></div>
+      <div class="mfield"><label>Best Time to Call</label>
+        <select id="cb-time"><option>Within 2 hours</option><option>Today evening (6–9 PM)</option><option>Tomorrow morning (10–12 PM)</option><option>Tomorrow afternoon (2–5 PM)</option></select>
       </div>
-      <div class="form-field"><label>I want help with</label>
-        <select id="cb-topic"><option>Fixed Deposits (FD)</option><option>Bonds</option><option>Gold / Silver Funds</option><option>Secured Credit Card</option><option>General investing advice</option></select>
+      <div class="mfield"><label>I want help with</label>
+        <select id="cb-topic"><option>Fixed Deposits (FD)</option><option>Bonds</option><option>Gold / Silver Funds</option><option>Secured Credit Card</option><option>General investing advice</option><option>Portfolio review</option></select>
       </div>
     </div>
-    <div class="modal-actions">
-      <button class="cta-btn primary" style="flex:1" onclick="submitCallback()">✅ Confirm Callback</button>
-      <button class="cta-btn secondary" onclick="closeModal('callbackModal')">Cancel</button>
+    <div class="mactions">
+      <button class="ic-btn primary" style="flex:1" onclick="submitCb()">✅ Confirm Callback</button>
+      <button class="ic-btn secondary" onclick="closeMod('cbModal')">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- PERSONA MODAL -->
-<div class="modal-overlay" id="personaModal" style="display:none" onclick="closeModal('personaModal')">
+<!-- PROFILE MODAL -->
+<div class="overlay" id="profileModal" style="display:none" onclick="closeMod('profileModal')">
   <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal('personaModal')">✕</button>
+    <button class="mclose" onclick="closeMod('profileModal')">✕</button>
     <h3>👤 Your Investor Profile</h3>
-    <p class="modal-sub">Help us suggest the right products for you.</p>
-    <div class="modal-form">
-      <div class="form-field"><label>Investment Goal</label>
-        <select id="p-goal"><option>Save for emergency fund</option><option>Regular monthly income</option><option>Long-term wealth building</option><option>Save for a big purchase</option><option>Retirement planning</option><option>Tax saving</option></select>
+    <p class="msub">This helps me give you personalised product suggestions.</p>
+    <div class="mform">
+      <div class="mfield"><label>Investment Goal</label>
+        <select id="p-goal"><option>Emergency fund / Safety net</option><option>Regular monthly income</option><option>Long-term wealth building</option><option>Save for big purchase</option><option>Retirement planning</option><option>Tax saving</option></select>
       </div>
-      <div class="form-field"><label>Monthly Investment Capacity</label>
-        <select id="p-amount"><option>Under ₹10,000</option><option>₹10,000 – ₹50,000</option><option>₹50,000 – ₹2 Lakh</option><option>₹2 Lakh – ₹10 Lakh</option><option>Above ₹10 Lakh</option></select>
+      <div class="mfield"><label>Investment Amount</label>
+        <select id="p-amt"><option>Under ₹10,000</option><option>₹10,000 – ₹50,000</option><option>₹50,000 – ₹2 Lakh</option><option>₹2 Lakh – ₹10 Lakh</option><option>Above ₹10 Lakh</option></select>
       </div>
-      <div class="form-field"><label>Investment Horizon</label>
-        <select id="p-horizon"><option>Less than 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select>
+      <div class="mfield"><label>Investment Horizon</label>
+        <select id="p-hor"><option>Less than 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select>
       </div>
-      <div class="form-field"><label>Risk Appetite</label>
-        <select id="p-risk"><option>Very conservative (capital safety first)</option><option>Conservative (low risk, steady returns)</option><option>Moderate (some risk for better returns)</option><option>Aggressive (high risk, high return)</option></select>
+      <div class="mfield"><label>Risk Appetite</label>
+        <select id="p-risk"><option>Very conservative (safety first)</option><option>Conservative (low risk)</option><option>Moderate (some risk ok)</option><option>Aggressive (high risk)</option></select>
       </div>
     </div>
-    <div class="modal-actions">
-      <button class="cta-btn primary" style="flex:1" onclick="savePersona()">💾 Save Profile</button>
-      <button class="cta-btn secondary" onclick="closeModal('personaModal')">Later</button>
+    <div class="mactions">
+      <button class="ic-btn primary" style="flex:1" onclick="saveProfile()">💾 Save Profile</button>
+      <button class="ic-btn secondary" onclick="closeMod('profileModal')">Later</button>
     </div>
   </div>
 </div>
 
 <script>
-const state = { history: [], isTyping: false, persona: {} };
+const S = { hist: [], typing: false, persona: {} };
 
-const SYSTEM = `You are Stable AI, the intelligent investment assistant for Stable Money — India's leading fixed-income investment platform trusted by 30 lakh+ investors. Warm, helpful, knowledgeable. Subtly guide users toward Stable Money products without being pushy.
+const SYS = `You are Stable AI, the intelligent investment assistant for Stable Money — India's leading fixed-income platform trusted by 30 lakh+ investors. You are warm, knowledgeable, and genuinely helpful. You subtly guide users toward Stable Money products.
 
 ## PRODUCTS
 
 ### Fixed Deposits
-- 200+ banks/NBFCs: Unity SFB 9.5%, Suryoday SFB 9.1%, Utkarsh SFB 9.0%, Shivalik SFB 8.8%, Bajaj Finance 8.35%, AU SFB 8.1%, IndusInd 7.75%
-- DICGC insured up to Rs 5 lakh per bank. Senior citizens get +0.25-0.5%
-- 100% digital, 3-minute KYC, no new bank account needed
-- Features: FD Laddering, Break FD, flexible tenures 7 days to 10 years
+200+ banks/NBFCs. Top rates: Unity SFB 9.5%, Suryoday SFB 9.1%, Utkarsh SFB 9.0%, Shivalik SFB 8.8%, Bajaj Finance 8.35%, AU SFB 8.1%, IndusInd 7.75%
+DICGC insured up to ₹5 lakh per bank. Senior citizens get +0.25–0.5%. 100% digital, 3-minute KYC.
+Features: FD Laddering, Break FD, tenures 7 days to 10 years. TDS if interest >₹40,000/year.
 
 ### Bonds
-- G-Secs: 7.0-7.4% sovereign guarantee; PSU Bonds: 7.5-8.5%; Corporate NCDs: 9-11%
-- RBI Floating Rate Bond: 8.05% p.a., 7-year, sovereign guarantee
-- Min Rs 1,000. Interest taxed per slab.
+G-Secs: 7.0–7.4% sovereign guarantee. PSU Bonds: 7.5–8.5%. Corporate NCDs (AA-rated): 9–11%.
+RBI Floating Rate Bond: 8.05% p.a., 7-year lock-in, sovereign guarantee. Min ₹1,000.
 
 ### Gold Mutual Funds
-- ETF-based, no physical gold risk, no demat needed
-- SIP from Rs 500. AMFI distributor ARN 269315.
-- Good for inflation hedge and diversification
+ETF-based, no physical gold, no demat needed. SIP from ₹500. 
+Historical CAGR ~12–15% over 3 years. Inflation hedge. AMFI ARN 269315.
 
 ### Silver Mutual Funds
-- Higher volatility than gold, higher upside potential
-- 5-10% portfolio allocation recommended
+Higher volatility than gold. 5–10% of portfolio max. For aggressive investors seeking commodity exposure.
 
 ### Secured Credit Cards (FD-backed)
-- Credit limit = 75-90% of FD value. FD still earns full interest.
-- No income proof needed. Builds CIBIL score.
-- Min FD: Rs 10,000-25,000.
+Credit limit = 75–90% of FD. FD still earns full interest. No income proof needed. Builds CIBIL score. Min FD ₹10,000–25,000.
 
-## BEHAVIOR
-- Educate first, recommend second, CTA third
-- Match products to user goals, amount, tenure, risk
-- End responses with a gentle next step
-- Nudge: "Stable Money currently shows X banks offering Y% — worth locking in before rates change"
-- Use **bold** for key numbers. Keep responses conversational, 3-5 lines for simple questions.
-- This is general financial information, not personalised advice.`;
+## KEY BEHAVIOR RULES
+
+1. Educate genuinely. Recommend smartly. CTA naturally.
+2. Keep responses warm and conversational — 3–5 lines for simple questions.
+3. Use **bold** for key numbers and product names.
+4. Always end responses about a specific product with an INVEST CTA block.
+5. Capture persona signals (amount, goal, tenure, risk) from conversation naturally.
+
+## INVEST CTA RULE — VERY IMPORTANT
+Whenever you answer a question where the user seems ready to act, or after giving a specific recommendation, ALWAYS end your message with this exact JSON block on its own line:
+
+[INVEST_CTA:{"product":"Fixed Deposit","investUrl":"https://stablemoney.in/fd","headline":"Ready to start your FD?","sub":"Lock in today's rates before they change. 3-minute paperless setup."}]
+
+Adjust the product name and headline to match what you just discussed. Examples:
+- For bonds: [INVEST_CTA:{"product":"Bonds","investUrl":"https://stablemoney.in/bonds","headline":"Explore bonds on Stable Money","sub":"Browse 50+ bond options with yields up to 11% p.a."}]
+- For gold: [INVEST_CTA:{"product":"Gold Fund","investUrl":"https://stablemoney.in/gold","headline":"Start a Gold SIP today","sub":"From ₹500/month. No demat needed."}]
+- For credit card: [INVEST_CTA:{"product":"Secured Credit Card","investUrl":"https://stablemoney.in/credit-card","headline":"Get your FD-backed credit card","sub":"No income proof. Build CIBIL. Your FD keeps earning."}]
+- For general/mixed: [INVEST_CTA:{"product":"Investment","investUrl":"https://stablemoney.in","headline":"Start investing on Stable Money","sub":"100% digital. 200+ options. Safe and paperless."}]
+
+This is general financial information, not personalised investment advice.`;
 
 window.onload = () => {
-  addBotMsg(
-    `Hi there! 👋 I'm **Stable AI**, your personal investment guide from Stable Money.\n\nI can help you with **FDs, Bonds, Gold, Silver Funds, and Secured Credit Cards** — learn, compare, or find what's right for your goals.\n\nWhat's on your mind?`,
+  addBot(
+    `Hi there! 👋 I'm **Stable AI**, your investment guide from Stable Money.\n\nI can help you with **FDs, Bonds, Gold, Silver Funds, and Secured Credit Cards** — learn, compare, and find what works for your goals.\n\nWhat's on your mind?`,
     ts(), null,
     { chips: ["💰 Best FD rates", "📊 FD vs Bonds", "🥇 Gold & Silver funds", "💳 Secured Credit Card", "🎯 Help me choose", "📈 Invest ₹1 lakh safely"] }
   );
 };
 
-async function sendMessage(txt) {
-  const inp = document.getElementById('userInput');
+async function send(txt) {
+  const inp = document.getElementById('inp');
   const msg = (txt || inp.value).trim();
-  if (!msg || state.isTyping) return;
+  if (!msg || S.typing) return;
   inp.value = ''; inp.style.height = 'auto';
-  addUserMsg(msg, ts());
-  state.history.push({ role: "user", content: msg });
+  addUser(msg, ts());
+  S.hist.push({ role: 'user', content: msg });
   setTyping(true);
   try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, system: SYSTEM, messages: state.history })
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYS, messages: S.hist })
     });
     const data = await res.json();
-    const raw = data.content?.map(b => b.text || "").join("") || "I couldn't process that. Please try again!";
-    state.history.push({ role: "assistant", content: raw });
+    const raw = data.content?.map(b => b.text || '').join('') || "I couldn't process that. Please try again!";
+    S.hist.push({ role: 'assistant', content: raw });
     setTyping(false);
-    addBotMsg(raw, ts());
+    const { text, cta } = parse(raw);
+    addBot(text, ts(), cta);
   } catch(e) {
     setTyping(false);
-    addBotMsg("I'm having trouble connecting right now. Please try again, or **request a callback** and our team will help you shortly!", ts());
+    addBot("I'm having trouble connecting. Please try again, or **request a callback** and our team will help! 😊", ts());
   }
+}
+
+function parse(raw) {
+  let text = raw, cta = null;
+  const m = raw.match(/\[INVEST_CTA:(\{.*?\})\]/s);
+  if (m) {
+    try { cta = JSON.parse(m[1]); } catch(e){}
+    text = raw.replace(m[0], '').trim();
+  }
+  return { text, cta };
 }
 
 function fmt(t) {
   if (!t) return '';
-  return '<p>' + t.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n\n+/g,'</p><p>').replace(/\n/g,'<br>') + '</p>';
+  return '<p>' + t
+    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+    .replace(/\n\n+/g, '</p><p>')
+    .replace(/\n/g, '<br>') + '</p>';
 }
 
-function addUserMsg(text, time) {
+function renderCTA(cta) {
+  return `<div class="invest-cta">
+    <div class="ic-title">${cta.headline}</div>
+    <div class="ic-sub">${cta.sub}</div>
+    <div class="ic-btns">
+      <button class="ic-btn primary" onclick="window.open('${cta.investUrl}','_blank')">🚀 Invest in ${cta.product}</button>
+      <button class="ic-btn secondary" onclick="openCb()">📞 Talk to an Expert</button>
+    </div>
+  </div>`;
+}
+
+function addUser(text, time) {
   const el = document.createElement('div');
-  el.className = 'msg-row user';
-  el.innerHTML = `<div class="bubble-wrap"><div class="bubble">${esc(text)}</div><div class="timestamp">${time}</div></div><div class="avatar user">You</div>`;
-  msgs().appendChild(el); sb();
+  el.className = 'row user';
+  el.innerHTML = `<div class="bwrap"><div class="bub">${esc(text)}</div><div class="ts">${time}</div></div><div class="av user">You</div>`;
+  m().appendChild(el); sb();
 }
 
-function addBotMsg(text, time, comps, extras) {
+function addBot(text, time, cta, extras) {
   const row = document.createElement('div');
-  row.className = 'msg-row bot';
-  let inner = `<div class="avatar bot">💚</div><div class="bubble-wrap">`;
-  if (text) inner += `<div class="bubble">${fmt(text)}</div>`;
-  if (extras?.chips) inner += `<div class="chips-row">${extras.chips.map(c => `<button class="chip" onclick="sendMessage('${ea(c)}')">${c}</button>`).join('')}</div>`;
-  inner += `<div class="timestamp">${time}</div></div>`;
+  row.className = 'row bot';
+  let inner = `<div class="av bot">💚</div><div class="bwrap">`;
+  if (text) inner += `<div class="bub">${fmt(text)}</div>`;
+  if (cta) inner += renderCTA(cta);
+  if (extras?.chips) inner += `<div class="chips">${extras.chips.map(c => `<button class="chip" onclick="send('${ea(c)}')">${c}</button>`).join('')}</div>`;
+  inner += `<div class="ts">${time}</div></div>`;
   row.innerHTML = inner;
-  msgs().appendChild(row); sb();
+  m().appendChild(row); sb();
 }
 
 function setTyping(on) {
-  state.isTyping = on;
-  document.getElementById('sendBtn').disabled = on;
-  const ex = document.getElementById('typingRow');
+  S.typing = on;
+  document.getElementById('sbtn').disabled = on;
+  const ex = document.getElementById('trow');
   if (on && !ex) {
     const el = document.createElement('div');
-    el.className = 'msg-row bot'; el.id = 'typingRow';
-    el.innerHTML = `<div class="avatar bot">💚</div><div class="bubble" style="padding:10px 14px"><div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
-    msgs().appendChild(el); sb();
+    el.className = 'row bot'; el.id = 'trow';
+    el.innerHTML = `<div class="av bot">💚</div><div class="bub" style="padding:8px 12px"><div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>`;
+    m().appendChild(el); sb();
   } else if (!on && ex) ex.remove();
 }
 
-function openCallback() { document.getElementById('callbackModal').style.display = 'flex'; }
-function openPersona() { document.getElementById('personaModal').style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function openCb() { document.getElementById('cbModal').style.display = 'flex'; }
+function openProfile() { document.getElementById('profileModal').style.display = 'flex'; }
+function closeMod(id) { document.getElementById(id).style.display = 'none'; }
 
-function submitCallback() {
+function submitCb() {
   const name = document.getElementById('cb-name').value.trim();
   const phone = document.getElementById('cb-phone').value.trim();
+  if (!name || !phone) { alert('Please enter your name and mobile number.'); return; }
   const time = document.getElementById('cb-time').value;
   const topic = document.getElementById('cb-topic').value;
-  if (!name || !phone) { alert('Please enter your name and mobile number.'); return; }
-  state.persona = { ...state.persona, name, phone, callbackTopic: topic };
-  closeModal('callbackModal');
-  addBotMsg(`✅ **Callback confirmed!** Thank you, ${name}.\n\nOur expert will call **${phone}** ${time.toLowerCase()} to help with: *${topic}*. Feel free to keep exploring! 😊`, ts());
+  S.persona = { ...S.persona, name, phone, topic };
+  closeMod('cbModal');
+  addBot(`✅ **Callback confirmed**, ${name}!\n\nOur expert will call **${phone}** — ${time.toLowerCase()} — to help with *${topic}*.\n\nFeel free to keep exploring in the meantime! 😊`, ts());
 }
 
-function savePersona() {
-  state.persona = { ...state.persona, goal: document.getElementById('p-goal').value, amount: document.getElementById('p-amount').value, horizon: document.getElementById('p-horizon').value, risk: document.getElementById('p-risk').value };
-  closeModal('personaModal');
+function saveProfile() {
+  S.persona = { ...S.persona,
+    goal: document.getElementById('p-goal').value,
+    amount: document.getElementById('p-amt').value,
+    horizon: document.getElementById('p-hor').value,
+    risk: document.getElementById('p-risk').value
+  };
+  closeMod('profileModal');
   setTimeout(() => {
-    sendMessage(`Based on my profile — goal: ${state.persona.goal}, investment: ${state.persona.amount}, horizon: ${state.persona.horizon}, risk: ${state.persona.risk} — what should I invest in on Stable Money?`);
+    send(`Based on my profile — goal: ${S.persona.goal}, amount: ${S.persona.amount}, horizon: ${S.persona.horizon}, risk: ${S.persona.risk} — what's the best Stable Money product for me?`);
   }, 400);
 }
 
-function msgs() { return document.getElementById('messages'); }
-function sb() { const m = msgs(); m.scrollTop = m.scrollHeight; }
+function m() { return document.getElementById('msgs'); }
+function sb() { const el = m(); el.scrollTop = el.scrollHeight; }
 function ts() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function ea(s) { return s.replace(/'/g,"\\'"); }
-function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
+function hk(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
+function ar(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight,110)+'px'; }
 </script>
 </body>
 </html>
