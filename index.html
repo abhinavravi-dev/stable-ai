@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stable AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--white:#FFFFFF;--bg:#F5F4FF;--surface:#FFFFFF;--surface2:#F8F7FF;--border:#E5E2F5;--purple:#6B3FD4;--purple-light:#EDE9FF;--purple-xlight:#F5F3FF;--purple-dark:#4A2BA0;--neon:#C6F135;--neon-dim:rgba(198,241,53,0.18);--teal:#00C9A7;--teal-dim:rgba(0,201,167,0.12);--red:#F24E4E;--text:#1A1233;--text-mid:#4B4272;--text-muted:#8B83A8;--text-light:#BDB8D7;--font:'Plus Jakarta Sans',sans-serif;--font-head:'Sora',sans-serif;--r-sm:10px;--r:16px;--r-xl:28px;--shadow:0 2px 16px rgba(107,63,212,.08);--shadow-md:0 4px 32px rgba(107,63,212,.13)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--font);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background-image:radial-gradient(ellipse at 30% 0%,rgba(107,63,212,.07) 0%,transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(0,201,167,.05) 0%,transparent 50%)}
+.wrap{width:100%;max-width:800px;display:flex;flex-direction:column;gap:10px}
+.top-bar{background:var(--surface);border-radius:var(--r-xl);padding:13px 20px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.logo-icon{width:38px;height:38px;background:var(--purple);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 3px 12px rgba(107,63,212,.35)}
+.logo-text h1{font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px;line-height:1.1}
+.logo-text h1 span{color:var(--purple)}
+.logo-text p{font-size:11px;color:var(--text-muted);margin-top:2px}
+.bar-right{margin-left:auto;display:flex;gap:6px;align-items:center}
+.pill{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600}
+.pill-live{background:var(--teal-dim);color:var(--teal);display:flex;align-items:center;gap:5px}
+.pill-live::before{content:'';width:6px;height:6px;background:var(--teal);border-radius:50%;animation:blink 2s infinite}
+.pill-sebi{background:var(--purple-light);color:var(--purple)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.tabs::-webkit-scrollbar{display:none}
+.ptab{padding:7px 15px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:all .18s;display:flex;align-items:center;gap:5px}
+.ptab:hover{border-color:var(--purple);color:var(--purple)}
+.ptab.active{background:var(--purple);border-color:var(--purple);color:white;box-shadow:0 3px 12px rgba(107,63,212,.3)}
+.chat{background:var(--surface);border-radius:var(--r-xl);border:1px solid var(--border);box-shadow:var(--shadow-md);display:flex;flex-direction:column;height:68vh;min-height:480px;max-height:720px;overflow:hidden}
+.msgs{flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;gap:18px;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.row{display:flex;gap:10px;animation:fu .3s ease}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.row.user{flex-direction:row-reverse}
+.av{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;align-self:flex-end}
+.av.bot{background:var(--purple);box-shadow:0 2px 10px rgba(107,63,212,.3)}
+.av.user{background:var(--purple-light);color:var(--purple);font-weight:700;font-size:12px}
+.bwrap{display:flex;flex-direction:column;gap:8px;max-width:78%}
+.row.user .bwrap{align-items:flex-end}
+.bub{padding:12px 16px;border-radius:var(--r);font-size:14.5px;line-height:1.65;color:var(--text)}
+.row.bot .bub{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:4px}
+.row.user .bub{background:var(--purple);color:white;border-bottom-right-radius:4px;box-shadow:0 2px 14px rgba(107,63,212,.25)}
+.bub p{margin-bottom:6px}
+.bub p:last-child{margin-bottom:0}
+.bub strong{color:var(--purple);font-weight:700}
+.row.user .bub strong{color:var(--neon)}
+.bub ul{padding-left:18px;margin:4px 0}
+.bub ul li{margin-bottom:4px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.chip{padding:6px 13px;border-radius:20px;background:var(--purple-xlight);border:1.5px solid var(--purple-light);color:var(--purple);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s;font-family:var(--font);white-space:nowrap}
+.chip:hover{background:var(--purple);color:white;border-color:var(--purple);transform:translateY(-1px);box-shadow:0 3px 10px rgba(107,63,212,.25)}
+.pgrid{display:flex;flex-direction:column;gap:8px;margin-top:6px;width:100%}
+.pcard{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 15px;display:flex;align-items:center;cursor:pointer;transition:all .18s;gap:12px}
+.pcard:hover{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-light);transform:translateX(3px)}
+.pcard.feat{background:var(--purple-xlight);border-color:var(--purple)}
+.pico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.pico.fd{background:#EDE9FF}.pico.bond{background:#E8F4FF}.pico.gold{background:#FFF8E7}.pico.sil{background:#F5F5F5}.pico.cc{background:#FFF0E8}
+.pinfo{flex:1}
+.pname{font-weight:700;font-size:13.5px;color:var(--text)}
+.pmeta{font-size:11.5px;color:var(--text-muted);margin-top:2px}
+.prate-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.prate{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--purple)}
+.prate span{font-family:var(--font);font-size:10.5px;color:var(--text-muted);font-weight:400}
+.btag{font-size:10.5px;padding:2px 8px;border-radius:8px;font-weight:600;white-space:nowrap}
+.hot{background:#FFE9E9;color:var(--red)}
+.safe{background:var(--teal-dim);color:var(--teal)}
+.neu{background:var(--neon-dim);color:#5A7A00}
+.cta-p{background:linear-gradient(135deg,var(--purple) 0%,#4A2BA0 100%);border-radius:var(--r);padding:18px;margin-top:6px;color:white;position:relative;overflow:hidden}
+.cta-p::before{content:'';position:absolute;top:-20px;right:-20px;width:90px;height:90px;background:rgba(198,241,53,.15);border-radius:50%}
+.cta-p::after{content:'';position:absolute;bottom:-25px;left:35%;width:70px;height:70px;background:rgba(255,255,255,.06);border-radius:50%}
+.cta-p h4{font-family:var(--font-head);font-size:15px;font-weight:700;margin-bottom:5px}
+.cta-p p{font-size:13px;opacity:.85;margin-bottom:14px}
+.cta-btns{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.cbtn{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all .18s}
+.cbtn-p{background:var(--neon);color:#2A3A00}
+.cbtn-p:hover{background:#d4f040;transform:translateY(-1px)}
+.cbtn-s{background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3)!important}
+.cbtn-s:hover{background:rgba(255,255,255,.25)}
+.quiz-p{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-top:6px}
+.quiz-p h4{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:7px}
+.qopt{padding:10px 14px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:var(--white);font-size:13.5px;color:var(--text-mid);cursor:pointer;transition:all .18s;font-family:var(--font);text-align:left;font-weight:500}
+.qopt:hover,.qopt.sel{border-color:var(--purple);color:var(--purple);background:var(--purple-xlight)}
+.ibox{background:var(--teal-dim);border:1px solid rgba(0,201,167,.2);border-radius:var(--r-sm);padding:12px 14px;margin-top:6px;font-size:13px;color:#006B5A;display:flex;gap:8px;align-items:flex-start}
+.typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.tdot{width:7px;height:7px;background:var(--purple-light);border-radius:50%;animation:bn 1.2s infinite}
+.tdot:nth-child(2){animation-delay:.2s;background:var(--purple);opacity:.6}
+.tdot:nth-child(3){animation-delay:.4s;background:var(--purple);opacity:.3}
+@keyframes bn{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.inp-area{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end;background:var(--surface);border-radius:0 0 var(--r-xl) var(--r-xl)}
+.inp{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:14px;padding:11px 16px;font-size:14.5px;font-family:var(--font);color:var(--text);outline:none;resize:none;min-height:44px;max-height:110px;line-height:1.5;transition:border-color .2s}
+.inp::placeholder{color:var(--text-muted)}
+.inp:focus{border-color:var(--purple)}
+.sbtn{width:44px;height:44px;background:var(--purple);border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .2s;flex-shrink:0;box-shadow:0 2px 12px rgba(107,63,212,.3)}
+.sbtn:hover{background:var(--purple-dark);transform:scale(1.05)}
+.sbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.disc{text-align:center;font-size:10.5px;color:var(--text-light);padding:6px 10px;line-height:1.6}
+@media(max-width:600px){.bwrap{max-width:88%}.bub{font-size:14px;padding:10px 13px}.bar-right .pill-sebi{display:none}.logo-text p{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="logo-icon">💰</div>
+    <div class="logo-text"><h1>Stable <span>AI</span></h1><p>Your smart investment guide</p></div>
+    <div class="bar-right">
+      <div class="pill pill-live">AI Live</div>
+      <div class="pill pill-sebi">AMFI Registered</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="ptab active" onclick="setTab(this,'all')">✦ All Products</button>
+    <button class="ptab" onclick="setTab(this,'fd')">🏦 Fixed Deposits</button>
+    <button class="ptab" onclick="setTab(this,'bonds')">📄 Bonds</button>
+    <button class="ptab" onclick="setTab(this,'gold')">🥇 Gold MF</button>
+    <button class="ptab" onclick="setTab(this,'silver')">🥈 Silver MF</button>
+    <button class="ptab" onclick="setTab(this,'cc')">💳 Co-Brand CC</button>
+  </div>
+  <div class="chat">
+    <div class="msgs" id="msgs"></div>
+    <div class="inp-area">
+      <textarea class="inp" id="inp" placeholder="Ask about FDs, bonds, gold, silver, credit cards…" rows="1" onkeydown="hk(event)" oninput="ar(this)"></textarea>
+      <button class="sbtn" id="sbtn" onclick="send()">➤</button>
+    </div>
+  </div>
+  <div class="disc">Stable AI provides general financial information only. Not personalised investment advice. Mutual Fund investments are subject to market risks. FDs &amp; Co-branded Cards are not regulated by SEBI. Stable Money acts as distributor. Read all scheme documents carefully.</div>
+</div>
+<script>
+var hist=[],persona={},busy=false;
+var SYS=`You are Stable AI, the intelligent financial assistant for Stable Money — India's leading fixed-return investment platform (Series B, backed by Lightspeed, Matrix, RTP Global).
+
+## Personality
+- Warm, knowledgeable, trust-inspiring — like a smart friend who is also a finance expert
+- Simple language for 25-35 year old Indian professionals
+- Genuinely helpful first; subtly nudge towards Stable Money products second
+- Never pushy. Build trust through education, then guide towards action
+
+## Products
+
+### Fixed Deposits (FDs)
+- Stable Money aggregates FDs from 200+ banks/NBFCs
+- Returns: 7.0% to 9.5% p.a.
+- Top rates: Unity SFB (9.5%), Suryoday SFB (9.1%), Utkarsh SFB (9.0%), Shriram Finance (8.5%), Bajaj Finance (8.35%), AU SFB (8.1%)
+- Senior citizens get +0.25% to +0.5% extra
+- Tenure: 7 days to 10 years. Premature withdrawal allowed with penalty
+- Tax: TDS if interest >40000/year (50000 for seniors). 5-year tax-saver FD qualifies for 80C
+- Safety: DICGC insures up to 5 lakh per bank. AA-rated NBFCs generally safe
+- USP: FD Laddering feature, Break FD feature, compare 200+ options instantly
+
+### Bonds
+- Stable Money has SEBI OBPP licence
+- Products: RBI Floating Rate Bonds (8.05% p.a., 7yr lock-in, sovereign guarantee), G-Secs (6.9-7.4%), PSU Bonds, SDLs, AA-rated Corporate Bonds (9-11%)
+- Min investment: Rs 1,000 for most bonds
+- Tax: Interest taxable per slab. Listed bonds held >12 months eligible for LTCG at 12.5%
+- RBI Bond: Safest — sovereign guarantee, floating rate 8.05%, semi-annual payout
+- High-yield: AA/AA- rated corporate bonds 9-11% with some credit risk
+
+### Gold Mutual Funds
+- AMFI-registered MF distributor (ARN: 269315)
+- ETF-based gold funds — no physical gold, no demat needed
+- 1Y return ~15-20%, 3Y CAGR ~12-15%
+- Tax: STCG if held <24 months. LTCG at 12.5% if held >24 months
+- SIP from Rs 500/month. T+1 redemption
+- Best for: Portfolio diversification, inflation hedge
+- Top funds: Nippon India Gold ETF FOF, HDFC Gold Fund, Axis Gold Fund
+
+### Silver Mutual Funds
+- Higher volatility than gold, higher potential upside
+- Returns track MCX silver in INR — volatile (20-40% up, 15-25% down)
+- Tax: Same as gold (24-month threshold for LTCG)
+- Best for: Aggressive investors wanting commodity diversification
+- Invest only 5-10% of portfolio
+- Top funds: Nippon India Silver ETF FOF, ICICI Pru Silver ETF FOF
+
+### Co-branded Secured Credit Card
+- Secured against FD (Rs 10,000-1L collateral)
+- Credit limit: ~75-80% of FD amount
+- FD continues to earn ~8% interest even while used as collateral
+- Build or rebuild CIBIL score
+- Great for: First-time credit users, rebuilding credit history
+- Not regulated by SEBI. Stable Money is distributor.
+
+## Response Strategy
+1. Educate first, recommend second, CTA third
+2. For confused users: ask discovery questions (goal, amount, tenure)
+3. For ready users: offer callback CTA prominently
+4. Use nudge phrases: "Stable Money currently shows X banks at Y% — worth locking in before rates change", "most investors in your situation prefer...", "available live on the app right now"
+5. End responses with a follow-up question OR a soft CTA
+
+## Formatting
+- 3-5 lines for simple questions, more for complex
+- Use **bold** for key numbers and product names
+- Max 2-3 options when comparing
+- Occasionally add: "This is general financial information, not personalised advice."`;
+
+function init(){
+  var m=document.getElementById('msgs');
+  var r=document.createElement('div');
+  r.className='row bot';
+  r.innerHTML='<div class="av bot">💰</div><div class="bwrap"><div class="bub"><p>Hey there! 👋 I\'m <strong>Stable AI</strong>, your personal investment guide from Stable Money.</p><p>I can help you with <strong>FDs, Bonds, Gold &amp; Silver Mutual Funds,</strong> and our <strong>Co-branded Credit Card</strong> — learn, compare, or start investing.</p><p>What\'s on your mind?</p></div><div class="chips"><button class="chip" onclick="qs(\'Best FD rates right now\')">🏦 Best FD rates</button><button class="chip" onclick="qs(\'Explain bonds simply\')">📄 Bonds explained</button><button class="chip" onclick="qs(\'Gold vs FD — which is better for 3 years?\')">🥇 Gold vs FD</button><button class="chip" onclick="qs(\'Help me find the right investment\')">🎯 Find my fit</button><button class="chip" onclick="qs(\'How does the secured credit card work?\')">💳 Credit card</button></div></div>';
+  m.appendChild(r);
+}
+
+function setTab(el,tab){
+  document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('active')});
+  el.classList.add('active');
+  var map={fd:'Tell me about Fixed Deposits on Stable Money — current rates, features, and how to choose',bonds:'What bonds can I invest in on Stable Money? Tell me about options and returns',gold:'Tell me about Gold Mutual Funds — how they work, current returns, and when to invest',silver:'Tell me about Silver Mutual Funds — are they worth investing in?',cc:'How does the Stable Money Co-branded Credit Card work? Who is it for?'};
+  if(tab!=='all') qs(map[tab]);
+}
+
+function ar(el){el.style.height='44px';el.style.height=Math.min(el.scrollHeight,110)+'px'}
+function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+function qs(t){document.getElementById('inp').value=t;send()}
+
+function addMsg(role,html){
+  var m=document.getElementById('msgs');
+  var r=document.createElement('div');
+  r.className='row '+role;
+  var av='<div class="av '+role+'">'+(role==='bot'?'💰':'U')+'</div>';
+  var bw='<div class="bwrap"><div class="bub">'+html+'</div></div>';
+  r.innerHTML=role==='user'?bw+av:av+bw;
+  m.appendChild(r);
+  m.scrollTop=m.scrollHeight;
+}
+
+function appBot(html){
+  var all=document.querySelectorAll('#msgs .row.bot .bwrap');
+  var last=all[all.length-1];
+  if(last){var d=document.createElement('div');d.innerHTML=html;while(d.firstChild)last.appendChild(d.firstChild)}
+  document.getElementById('msgs').scrollTop=999999;
+}
+
+function showTyping(){
+  var m=document.getElementById('msgs');
+  var r=document.createElement('div');
+  r.id='trow';r.className='row bot';
+  r.innerHTML='<div class="av bot">💰</div><div class="bwrap"><div class="bub"><div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div></div>';
+  m.appendChild(r);m.scrollTop=m.scrollHeight;
+}
+function hideTyping(){var t=document.getElementById('trow');if(t)t.remove()}
+
+function fmt(t){
+  return '<p>'+t
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n- /g,'</p><p>• ')
+    .replace(/\n/g,'<br>')+'</p>';
+}
+
+function richItems(msg,resp){
+  var m=msg.toLowerCase(),r=resp.toLowerCase(),out=[];
+  if((m.includes('fd')||m.includes('fixed deposit')||m.includes('rate'))&&(r.includes('%')||r.includes('fd')))out.push('fd');
+  if(m.includes('bond')||r.includes('bond'))out.push('bond');
+  if(m.includes('gold')||r.includes('gold fund'))out.push('gold');
+  if((m.includes('silver')||r.includes('silver fund'))&&!m.includes('gold'))out.push('silver');
+  if(m.includes('credit card')||m.includes(' cc')||r.includes('credit card'))out.push('cc');
+  if(m.includes('invest')||m.includes('start')||m.includes('book')||m.includes('ready')||r.includes('callback')||r.includes('advisor'))out.push('cta');
+  if(m.includes('help me')||m.includes('recommend')||m.includes('which is better')||m.includes('best for me')||m.includes('find')||m.includes('profile')||m.includes('fit'))out.push('quiz');
+  out.push('chips');
+  return out.filter(function(v,i,a){return a.indexOf(v)===i});
+}
+
+function fdCards(){return '<div class="pgrid"><div class="pcard feat" onclick="qs(\'Tell me more about Unity Small Finance Bank FD — is it safe?\')"><div class="pico fd">🏦</div><div class="pinfo"><div class="pname">Unity Small Finance Bank</div><div class="pmeta">1001 days · DICGC insured · Scheduled Bank</div></div><div class="prate-wrap"><div class="prate">9.5%<span> p.a.</span></div><div class="btag hot">🔥 Highest</div></div></div><div class="pcard" onclick="qs(\'Tell me about Bajaj Finance FD\')"><div class="pico fd">🏦</div><div class="pinfo"><div class="pname">Bajaj Finance FD</div><div class="pmeta">24 months · ICRA MAAA · Most popular NBFC</div></div><div class="prate-wrap"><div class="prate">8.35%<span> p.a.</span></div><div class="btag safe">✓ Very Safe</div></div></div><div class="pcard" onclick="qs(\'Tell me about AU Small Finance Bank FD\')"><div class="pico fd">🏦</div><div class="pinfo"><div class="pname">AU Small Finance Bank</div><div class="pmeta">18 months · Scheduled Bank · DICGC insured</div></div><div class="prate-wrap"><div class="prate">8.1%<span> p.a.</span></div><div class="btag safe">✓ Bank FD</div></div></div></div>';}
+function bondCards(){return '<div class="pgrid"><div class="pcard feat" onclick="qs(\'Tell me about RBI Floating Rate Bonds — how to invest?\')"><div class="pico bond">📄</div><div class="pinfo"><div class="pname">RBI Floating Rate Bond</div><div class="pmeta">7 years · Sovereign guarantee · Semi-annual payout</div></div><div class="prate-wrap"><div class="prate">8.05%<span> p.a.</span></div><div class="btag safe">🏛 Sovereign</div></div></div><div class="pcard" onclick="qs(\'What AA-rated corporate bonds are on Stable Money?\')"><div class="pico bond">📄</div><div class="pinfo"><div class="pname">AA-rated Corporate Bonds</div><div class="pmeta">2–5 years · Listed NSE/BSE · ₹1,000 min</div></div><div class="prate-wrap"><div class="prate">9–11%<span> p.a.</span></div><div class="btag hot">🔥 High Yield</div></div></div><div class="pcard" onclick="qs(\'What are G-Secs and should I invest in them?\')"><div class="pico bond">📄</div><div class="pinfo"><div class="pname">Government Securities</div><div class="pmeta">5–40 years · Zero default risk · Highly liquid</div></div><div class="prate-wrap"><div class="prate">6.9–7.4%<span> p.a.</span></div><div class="btag safe">✓ Sovereign</div></div></div></div>';}
+function goldCards(){return '<div class="pgrid"><div class="pcard feat" onclick="qs(\'Tell me about Nippon India Gold ETF FOF\')"><div class="pico gold">🥇</div><div class="pinfo"><div class="pname">Nippon India Gold ETF FOF</div><div class="pmeta">No demat · SIP from ₹500 · Tracks MCX gold</div></div><div class="prate-wrap"><div class="prate">~15%<span> 1Y</span></div><div class="btag neu">⭐ Popular</div></div></div><div class="pcard" onclick="qs(\'Tell me about HDFC Gold Fund\')"><div class="pico gold">🥇</div><div class="pinfo"><div class="pname">HDFC Gold Fund</div><div class="pmeta">FOF · Low expense ratio · T+1 redemption</div></div><div class="prate-wrap"><div class="prate">~14%<span> 1Y</span></div><div class="btag safe">✓ Large AMC</div></div></div></div>';}
+function silverCards(){return '<div class="pgrid"><div class="pcard feat" onclick="qs(\'Tell me about Nippon India Silver ETF FOF\')"><div class="pico sil">🥈</div><div class="pinfo"><div class="pname">Nippon India Silver ETF FOF</div><div class="pmeta">High volatility · SIP from ₹500 · Tracks MCX silver</div></div><div class="prate-wrap"><div class="prate">~20%<span> avg 1Y</span></div><div class="btag hot">⚡ Aggressive</div></div></div><div class="pcard" onclick="qs(\'Tell me about ICICI Pru Silver ETF FOF\')"><div class="pico sil">🥈</div><div class="pinfo"><div class="pname">ICICI Pru Silver ETF FOF</div><div class="pmeta">FOF · Diversified silver · ICICI AMC</div></div><div class="prate-wrap"><div class="prate">~18%<span> avg 1Y</span></div><div class="btag neu">⭐ New</div></div></div></div>';}
+function ccCards(){return '<div class="pgrid"><div class="pcard feat" onclick="qs(\'How do I apply for the Stable Money secured credit card?\')"><div class="pico cc">💳</div><div class="pinfo"><div class="pname">Stable Money Co-brand Card</div><div class="pmeta">Secured against FD · 75–80% credit limit · Build CIBIL</div></div><div class="prate-wrap"><div class="prate" style="font-size:12px;line-height:1.4">FD earns<br>8%+ too</div><div class="btag neu">🆕 Unique</div></div></div></div><div class="ibox"><span style="font-size:16px;flex-shrink:0">💡</span><div>Your FD continues to earn ~8% interest even while it backs your credit card — making your effective borrowing cost near-zero vs regular credit cards.</div></div>';}
+function ctaPanel(){return '<div class="cta-p"><h4>Ready to start investing? 🚀</h4><p>Our advisors can help you pick the right product and get you started in under 10 minutes.</p><div class="cta-btns"><button class="cbtn cbtn-p" onclick="qs(\'I want a callback from a Stable Money advisor\')">📞 Request Callback</button><button class="cbtn cbtn-s" onclick="qs(\'Walk me through how to invest on Stable Money step by step\')">How to invest →</button></div></div>';}
+function quizPanel(){return '<div class="quiz-p"><h4>🎯 Quick profile — help me find your best match</h4><div class="qopts"><button class="qopt" onclick="qpick(this,\'Capital safety — I want to protect my money first\')">🛡️ Capital safety — protect my money first</button><button class="qopt" onclick="qpick(this,\'Maximum returns — highest possible yield\')">📈 Maximum returns — highest possible yield</button><button class="qopt" onclick="qpick(this,\'Tax saving — I need 80C deductions this year\')">🏷️ Tax saving — I need 80C deductions</button><button class="qopt" onclick="qpick(this,\'Portfolio diversification — spread my risk\')">🌐 Diversification — spread my risk</button><button class="qopt" onclick="qpick(this,\'Regular income — monthly or quarterly payouts\')">💵 Regular income — monthly/quarterly payouts</button></div></div>';}
+function chipsFor(msg){
+  var m=msg.toLowerCase(),opts;
+  if(m.includes('fd')||m.includes('fixed deposit'))opts=['Tax on FD interest','FD vs Bonds for 3 years','Senior citizen FD rates','How to break an FD early'];
+  else if(m.includes('bond'))opts=['Bond vs FD comparison','Are corporate bonds safe?','RBI Bond vs FD','How to buy bonds online'];
+  else if(m.includes('gold'))opts=['Gold vs Silver fund','Should I SIP in gold?','Gold fund tax treatment','Gold vs FD for 5 years'];
+  else if(m.includes('silver'))opts=['Silver vs Gold performance','Is silver fund risky?','How much to invest in silver?','Silver vs Gold MF'];
+  else if(m.includes('credit card')||m.includes(' cc'))opts=['How to apply for the card','What CIBIL score do I need?','Secured vs regular credit card'];
+  else opts=['Best option for 1 lakh?','Safe investments 2025','FD vs Bonds comparison','Tax-saving investment options'];
+  return '<div class="chips">'+opts.slice(0,4).map(function(c){return '<button class="chip" onclick="qs(\''+c+'\')">'+c+'</button>'}).join('')+'</div>';
+}
+
+function qpick(el,val){
+  document.querySelectorAll('.qopt').forEach(function(o){o.classList.remove('sel')});
+  el.classList.add('sel');
+  persona.goal=val;
+  setTimeout(function(){qs('Based on my goal — "'+val+'" — what should I invest in on Stable Money?')},400);
+}
+
+function trackPersona(msg){
+  var m=msg.toLowerCase();
+  if(m.match(/\d+\s*lakh/))persona.amount='medium-large';
+  if(m.includes('safe')||m.includes('protect'))persona.risk='conservative';
+  if(m.includes('high return')||m.includes('maximum'))persona.risk='aggressive';
+  if(m.includes('tax')||m.includes('80c'))persona.goal='tax-saving';
+  if(m.includes('retire')||m.includes('long term'))persona.horizon='long';
+  if(m.includes('short')||m.includes('6 month')||m.includes('1 year'))persona.horizon='short';
+  console.log('[Stable AI Persona]',persona);
+}
+
+async function send(){
+  var inp=document.getElementById('inp'),btn=document.getElementById('sbtn');
+  var text=inp.value.trim();
+  if(!text||busy)return;
+  inp.value='';inp.style.height='44px';busy=true;btn.disabled=true;
+  addMsg('user','<p>'+text.replace(/</g,'&lt;')+'</p>');
+  hist.push({role:'user',content:text});
+  trackPersona(text);
+  showTyping();
+  try{
+    var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:hist})});
+    var data=await res.json();
+    hideTyping();
+    var ai=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"I'm having trouble responding. Please try again.";
+    hist.push({role:'assistant',content:ai});
+    addMsg('bot',fmt(ai));
+    await new Promise(function(r){setTimeout(r,200)});
+    var items=richItems(text,ai);
+    if(items.includes('fd'))appBot(fdCards());
+    if(items.includes('bond'))appBot(bondCards());
+    if(items.includes('gold'))appBot(goldCards());
+    if(items.includes('silver'))appBot(silverCards());
+    if(items.includes('cc'))appBot(ccCards());
+    if(items.includes('cta'))appBot(ctaPanel());
+    if(items.includes('quiz'))appBot(quizPanel());
+    if(items.includes('chips'))appBot(chipsFor(text));
+  }catch(e){
+    hideTyping();
+    addMsg('bot','<p>Sorry, something went wrong. Please try again.</p>');
+  }
+  busy=false;btn.disabled=false;
+  document.getElementById('msgs').scrollTop=999999;
+}
+
+init();
+</script>
+</body>
+</html>
