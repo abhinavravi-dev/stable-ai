@@ -339,6 +339,11 @@ let chatHist = [];
 // ══════════════════════════════════════════
 const STEPS = [
   {
+    id: 'name',
+    type: 'name',
+    advisorMsg: `Hi there! 👋 I'm your Stable Money investment guide — think of me as a smart friend who knows finance.<br><br>I'm here to help you figure out what works for <b>you</b>, not push products at you. Before we start — <b>what should I call you?</b>`,
+  },
+  {
     id: 'goal',
     advisorMsg: `Hi there! 👋 I'm your Stable Money investment guide. I'm here to help you make your money work harder — not to push products at you.\n\nLet's start simple: <b>what's bringing you here today?</b> What are you hoping to do with your money?`,
     question: 'What are you investing for?',
@@ -357,11 +362,12 @@ const STEPS = [
   {
     id: 'timeline',
     advisorMsgFn: () => {
+      const n = P.name ? P.name + ', ' : '';
       const g = P.goal;
-      if (g === 'emergency_fund') return `Got it — an emergency fund is one of the smartest things you can build. 💪\n\nEmergency funds need to be <b>accessible quickly</b>, so we'll want something liquid. One quick question: <b>do you have any savings set aside already, or are you starting from scratch?</b>`;
-      if (g === 'monthly_sip') return `Love it — a regular SIP is one of the most powerful wealth-building habits.\n\n<b>When would you ideally want to start using this money?</b> This helps me figure out the right product mix for you.`;
-      if (g === 'goal_specific') return `Great — goal-based investing is really effective when done right. 🎯\n\n<b>What's the goal, and roughly when do you need the money?</b>`;
-      return `Makes sense. <b>What's your rough time horizon?</b> When might you need access to this money?`;
+      if (g === 'emergency_fund') return `Got it, ${n}an emergency fund is one of the smartest things you can build. 💪<br><br>Emergency funds need to be <b>accessible quickly</b>. One quick question: <b>do you have any savings set aside already, or are you starting from scratch?</b>`;
+      if (g === 'monthly_sip') return `Love it${P.name ? ', ' + P.name : ''} — a regular SIP is one of the most powerful wealth-building habits.<br><br><b>When would you ideally want to start using this money?</b>`;
+      if (g === 'goal_specific') return `Great${P.name ? ', ' + P.name : ''} — goal-based investing is really effective when done right. 🎯<br><br><b>What's the goal, and roughly when do you need the money?</b>`;
+      return `Makes sense${P.name ? ', ' + P.name : ''}. <b>What's your rough time horizon?</b> When might you need access to this money?`;
     },
     question: 'What\'s your timeline?',
     options: [
@@ -376,7 +382,7 @@ const STEPS = [
   },
   {
     id: 'amount',
-    advisorMsg: `Good to know. Now let's talk numbers — don't worry, there's no wrong answer here.\n\n<b>How much are you looking to invest, and how?</b> Pick what fits — you can also tell me in your own words.`,
+    advisorMsgFn: () => `Good to know${P.name ? ', ' + P.name : ''}. Now let's talk numbers — no wrong answers here.<br><br><b>How much are you looking to invest, and how?</b> Pick what fits, or tell me in your own words.`,
     question: 'Investment amount & style',
     options: [
       { emoji: '💰', label: 'One-time: Under ₹1L', val: 'lumpsum_small' },
@@ -392,7 +398,7 @@ const STEPS = [
   },
   {
     id: 'priorities',
-    advisorMsg: `Almost there! This one matters a lot for which products I suggest.\n\n<b>What matters most to you?</b> Pick your top 1–2 priorities.`,
+    advisorMsgFn: () => `Almost there${P.name ? ', ' + P.name : ''}! This one really shapes what I'll suggest.<br><br><b>What matters most to you?</b> Pick your top 1–2 priorities.`,
     question: 'What matters most to you?',
     options: [
       { emoji: '🔒', label: 'Capital safety', val: 'safety' },
@@ -409,7 +415,7 @@ const STEPS = [
   },
   {
     id: 'rate',
-    advisorMsg: `Last one — and this is interesting. 😊\n\n<b>What kind of returns are you expecting?</b> Use the slider to tell me your target. I'll let you know what's realistically available right now.`,
+    advisorMsgFn: () => `Last one — and this is an interesting one 😊${P.name ? ', ' + P.name : ''}!<br><br><b>What kind of returns are you expecting?</b> Use the slider — I'll tell you what's realistically available right now.`,
     type: 'slider',
   },
 ];
@@ -431,7 +437,12 @@ function renderStep(idx) {
       <div class="advisor-bubble">${advisorText.replace(/\n/g,'<br>')}</div>
     </div>`;
 
-  if (step.type === 'slider') {
+  if (step.type === 'name') {
+    html += `<div class="open-wrap">
+      <input class="open-inp" id="nameInp" placeholder="e.g. Rahul, Priya, Aakash…" onkeydown="if(event.key==='Enter')submitName()" style="font-size:16px" autofocus>
+      <button class="open-btn" onclick="submitName()">→</button>
+    </div>`;
+  } else if (step.type === 'slider') {
     html += renderSlider();
   } else {
     html += `<div class="opt-grid" id="optGrid">`;
@@ -523,6 +534,14 @@ function submitOpen(stepId) {
   goNext(val);
 }
 
+function submitName() {
+  const val = document.getElementById('nameInp') && document.getElementById('nameInp').value.trim();
+  if (!val) { document.getElementById('nameInp').focus(); return; }
+  P.name = val;
+  currentStep++;
+  renderStep(currentStep);
+}
+
 function goNext(openVal) {
   const step = STEPS[currentStep];
   if (step.type === 'slider') {
@@ -567,7 +586,7 @@ function showSummary() {
     <div class="step-card">
       <div class="advisor-msg">
         <div class="advisor-av">💚</div>
-        <div class="advisor-bubble">Perfect — I've got everything I need. Here's what I've noted down about you. <b>Does this look right?</b> If yes, let's get to the good stuff.</div>
+        <div class="advisor-bubble">Perfect — ${P.name ? 'Thanks, ' + P.name + '! I' : 'I'}'ve got everything I need. Here's what I've noted down about you. <b>Does this look right?</b> If yes, let's get to the good stuff.</div>
       </div>
       <div class="summary-grid">
         <div class="sum-item"><div class="sum-label">Goal</div><div class="sum-val">${goalLabel}</div></div>
@@ -596,11 +615,18 @@ Secured Credit Card: FD-backed, 75–90% credit limit, FD still earns interest, 
 
 ## TONE & BEHAVIOR
 - Warm, conversational, like a smart friend — not a salesperson
-- Offer 2–3 options with clear tradeoffs, ask "would you like to explore this?" before pushing
+- Use the user's name naturally in conversation — not every message, just when it feels warm and natural
+- Offer 2-3 options with clear tradeoffs, ask "would you like to explore this?" before pushing
 - When user seems ready to act, show an INVEST CTA block
 - Use **bold** for key numbers
 - End messages with a soft question or offer to help further — never a hard sell
 - NEVER be repetitive or pushy
+
+## LANGUAGE SWITCHING
+- Default language: English
+- If the user writes in Hinglish (Hindi + English mix) or Hindi at ANY point, immediately switch to Hinglish and stay in that mode for the rest of the conversation
+- In Hinglish mode: use natural conversational Hindi phrases like "aapke liye sahi rahega", "tension mat lo", "bilkul safe hai", "achhe returns milenge", "kya aap chahenge" — but always keep financial terms in English (FD, SIP, bonds, returns, maturity, DICGC, CIBIL)
+- Match the user's exact energy and formality level
 
 ## INVEST CTA RULE
 When appropriate (user asks about a specific product, or signals readiness), end your message with:
@@ -618,6 +644,7 @@ function buildSystemPrompt() {
   const rateLabel = P.targetRate ? `${parseFloat(P.targetRate).toFixed(1)}% p.a.` : 'not specified';
 
   return SYS_BASE + `
+Name: ${P.name || 'not provided'}
 Goal: ${goalLabel}
 Timeline: ${timelineLabel}
 Investment style: ${amountLabel}
@@ -635,9 +662,10 @@ function startChat() {
   // pill summary
   const goalLabel = P.goal_label || P.goal || '';
   const rateLabel = P.targetRate ? ` · ${parseFloat(P.targetRate).toFixed(1)}% target` : '';
+  document.getElementById('pillName').textContent = P.name ? P.name + "'s Profile" : 'Your Profile';
   document.getElementById('pillSummary').textContent = `${goalLabel}${rateLabel}`;
 
-  const opening = `Great, I've got your profile! 🎉 I have some ideas that might work well for you — **would you like me to share them**, or is there something specific you'd like to explore first?`;
+  const opening = `Great${P.name ? ', ' + P.name : ''}! I've got your profile 🎉 I have some ideas that might work well for you — **would you like me to share them**, or is there something specific you'd like to explore first?`;
   addBotMsg(opening, ts(), null, {
     chips: ['Yes, show me your suggestions', 'Tell me about FD rates', 'What bonds should I look at?', 'How do I get started?']
   });
